@@ -1,11 +1,19 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import Navbar from './components/Navbar.vue'
 import DashboardStats from './components/DashboardStats.vue'
 import TicketForm from './components/TicketForm.vue'
 import TicketList from './components/TicketList.vue'
+import SearchBar from './components/SearchBar.vue'
 
 const tickets = ref([])
+const search = ref('')
+
+const filteredTickets = computed(() => {
+  return tickets.value.filter((ticket) =>
+    ticket.title.toLowerCase().includes(search.value.toLowerCase()),
+  )
+})
 
 onMounted(() => {
   const savedTickets = localStorage.getItem('tickets')
@@ -57,8 +65,13 @@ function deleteTicket(id) {
 
     <TicketForm @add-ticket="addTicket" />
 
+    <SearchBar
+      :search="search"
+      @update-search="search = $event"
+    />
+
     <TicketList
-      :tickets="tickets"
+      :tickets="filteredTickets"
       @update-status="updateStatus"
       @delete-ticket="deleteTicket"
     />
