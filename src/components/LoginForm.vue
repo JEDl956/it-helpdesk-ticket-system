@@ -126,10 +126,7 @@ function createAccount() {
 
       <p v-if="message" class="message">{{ message }}</p>
 
-      <div class="test-box">
-        <p><strong>Test Account</strong></p>
-        <p>admin@test.com / password123</p>
-      </div>
+      
     </section>
   </main>
 </template>
