@@ -1,13 +1,16 @@
 <script setup>
+import Navbar from './components/Navbar.vue'
+import TicketForm from './components/TicketForm.vue'
+import TicketList from './components/TicketList.vue'
 </script>
 
 <template>
-  <main class="container">
-    <h1>IT Help Desk Ticket System</h1>
+  <Navbar />
 
-    <p>
-      Manage and track support tickets.
-    </p>
+  <main class="container">
+    <TicketForm />
+
+    <TicketList />
   </main>
 </template>
 
@@ -15,9 +18,5 @@
 .container {
   padding: 2rem;
   font-family: Arial, sans-serif;
-}
-
-h1 {
-  color: #2563eb;
 }
 </style>
