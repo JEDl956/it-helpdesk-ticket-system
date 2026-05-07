@@ -5,6 +5,8 @@ defineProps({
     required: true,
   },
 })
+
+defineEmits(['update-status', 'delete-ticket'])
 </script>
 
 <template>
@@ -16,6 +18,16 @@ defineProps({
     <p><strong>Priority:</strong> {{ ticket.priority }}</p>
     <p><strong>Status:</strong> {{ ticket.status }}</p>
     <p><strong>Created:</strong> {{ ticket.createdAt }}</p>
+
+    <div class="actions">
+      <button @click="$emit('update-status')">
+        Change Status
+      </button>
+
+      <button class="delete" @click="$emit('delete-ticket')">
+        Delete
+      </button>
+    </div>
   </article>
 </template>
 
@@ -24,5 +36,22 @@ defineProps({
   border: 1px solid #ccc;
   padding: 1rem;
   margin-top: 1rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.delete {
+  background-color: #dc2626;
 }
 </style>

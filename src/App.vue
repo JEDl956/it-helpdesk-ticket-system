@@ -14,6 +14,22 @@ function addTicket(ticket) {
     createdAt: new Date().toLocaleDateString(),
   })
 }
+
+function updateStatus(id) {
+  const ticket = tickets.value.find((ticket) => ticket.id === id)
+
+  if (ticket.status === 'Open') {
+    ticket.status = 'In Progress'
+  } else if (ticket.status === 'In Progress') {
+    ticket.status = 'Closed'
+  } else {
+    ticket.status = 'Open'
+  }
+}
+
+function deleteTicket(id) {
+  tickets.value = tickets.value.filter((ticket) => ticket.id !== id)
+}
 </script>
 
 <template>
@@ -22,7 +38,11 @@ function addTicket(ticket) {
   <main class="container">
     <TicketForm @add-ticket="addTicket" />
 
-    <TicketList :tickets="tickets" />
+    <TicketList
+      :tickets="tickets"
+      @update-status="updateStatus"
+      @delete-ticket="deleteTicket"
+    />
   </main>
 </template>
 

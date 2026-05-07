@@ -7,6 +7,8 @@ defineProps({
     required: true,
   },
 })
+
+defineEmits(['update-status', 'delete-ticket'])
 </script>
 
 <template>
@@ -19,6 +21,8 @@ defineProps({
       v-for="ticket in tickets"
       :key="ticket.id"
       :ticket="ticket"
+      @update-status="$emit('update-status', ticket.id)"
+      @delete-ticket="$emit('delete-ticket', ticket.id)"
     />
   </section>
 </template>
