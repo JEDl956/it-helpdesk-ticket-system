@@ -5,14 +5,23 @@ import DashboardStats from './components/DashboardStats.vue'
 import TicketForm from './components/TicketForm.vue'
 import TicketList from './components/TicketList.vue'
 import SearchBar from './components/SearchBar.vue'
+import StatusFilter from './components/StatusFilter.vue'
 
 const tickets = ref([])
 const search = ref('')
+const statusFilter = ref('All')
 
 const filteredTickets = computed(() => {
-  return tickets.value.filter((ticket) =>
-    ticket.title.toLowerCase().includes(search.value.toLowerCase()),
-  )
+  return tickets.value.filter((ticket) => {
+    const matchesSearch = ticket.title
+      .toLowerCase()
+      .includes(search.value.toLowerCase())
+
+    const matchesStatus =
+      statusFilter.value === 'All' || ticket.status === statusFilter.value
+
+    return matchesSearch && matchesStatus
+  })
 })
 
 onMounted(() => {
@@ -55,6 +64,17 @@ function updateStatus(id) {
 function deleteTicket(id) {
   tickets.value = tickets.value.filter((ticket) => ticket.id !== id)
 }
+
+function editTicket(updatedTicket) {
+  const ticket = tickets.value.find(
+    (ticket) => ticket.id === updatedTicket.id,
+  )
+
+  if (ticket) {
+    ticket.title = updatedTicket.title
+    ticket.description = updatedTicket.description
+  }
+}
 </script>
 
 <template>
@@ -70,10 +90,16 @@ function deleteTicket(id) {
       @update-search="search = $event"
     />
 
+    <StatusFilter
+      :status-filter="statusFilter"
+      @update-status-filter="statusFilter = $event"
+    />
+
     <TicketList
       :tickets="filteredTickets"
       @update-status="updateStatus"
       @delete-ticket="deleteTicket"
+      @edit-ticket="editTicket"
     />
   </main>
 </template>
