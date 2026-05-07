@@ -1,19 +1,78 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const emit = defineEmits(['login'])
 
+const mode = ref('login')
 const email = ref('')
 const password = ref('')
-const error = ref('')
+const confirmPassword = ref('')
+const message = ref('')
+const users = ref([])
+
+onMounted(() => {
+  const savedUsers = localStorage.getItem('users')
+
+  if (savedUsers) {
+    users.value = JSON.parse(savedUsers)
+  } else {
+    users.value = [
+      {
+        email: 'admin@test.com',
+        password: 'password123',
+      },
+    ]
+
+    localStorage.setItem('users', JSON.stringify(users.value))
+  }
+})
+
+function saveUsers() {
+  localStorage.setItem('users', JSON.stringify(users.value))
+}
 
 function handleLogin() {
-  if (email.value === 'admin@test.com' && password.value === 'password123') {
+  const foundUser = users.value.find(
+    (user) => user.email === email.value && user.password === password.value,
+  )
+
+  if (foundUser) {
+    message.value = ''
     emit('login')
-    error.value = ''
   } else {
-    error.value = 'Invalid email or password.'
+    message.value = 'Invalid email or password.'
   }
+}
+
+function createAccount() {
+  if (!email.value || !password.value || !confirmPassword.value) {
+    message.value = 'Please fill in all fields.'
+    return
+  }
+
+  if (password.value !== confirmPassword.value) {
+    message.value = 'Passwords do not match.'
+    return
+  }
+
+  const userExists = users.value.some((user) => user.email === email.value)
+
+  if (userExists) {
+    message.value = 'This email already has an account.'
+    return
+  }
+
+  users.value.push({
+    email: email.value,
+    password: password.value,
+  })
+
+  saveUsers()
+
+  message.value = 'Account created. You can now sign in.'
+  mode.value = 'login'
+  password.value = ''
+  confirmPassword.value = ''
 }
 </script>
 
@@ -23,17 +82,49 @@ function handleLogin() {
       <div class="icon">🎧</div>
 
       <h1>IT Help Desk</h1>
-      <p class="subtitle">Sign in to manage support tickets</p>
+      <p class="subtitle">Manage support tickets securely</p>
 
-      <form @submit.prevent="handleLogin">
+      <div class="tabs">
+        <button
+          :class="{ active: mode === 'login' }"
+          type="button"
+          @click="mode = 'login'; message = ''"
+        >
+          Sign In
+        </button>
+
+        <button
+          :class="{ active: mode === 'register' }"
+          type="button"
+          @click="mode = 'register'; message = ''"
+        >
+          Create Account
+        </button>
+      </div>
+
+      <form v-if="mode === 'login'" @submit.prevent="handleLogin">
         <input v-model="email" type="email" placeholder="Email address" />
 
         <input v-model="password" type="password" placeholder="Password" />
 
-        <button type="submit">Sign In</button>
-
-        <p v-if="error" class="error">{{ error }}</p>
+        <button class="primary" type="submit">Sign In</button>
       </form>
+
+      <form v-else @submit.prevent="createAccount">
+        <input v-model="email" type="email" placeholder="Create email address" />
+
+        <input v-model="password" type="password" placeholder="Create password" />
+
+        <input
+          v-model="confirmPassword"
+          type="password"
+          placeholder="Confirm password"
+        />
+
+        <button class="primary" type="submit">Create Account</button>
+      </form>
+
+      <p v-if="message" class="message">{{ message }}</p>
 
       <div class="test-box">
         <p><strong>Test Account</strong></p>
@@ -58,7 +149,7 @@ function handleLogin() {
 
 .login-card {
   width: 100%;
-  max-width: 430px;
+  max-width: 450px;
   background-color: #111827;
   border: 1px solid #1f2937;
   padding: 2.5rem;
@@ -84,9 +175,35 @@ h1 {
 }
 
 .subtitle {
-  margin: 0.5rem 0 2rem;
+  margin: 0.5rem 0 1.5rem;
   text-align: center;
   color: #9ca3af;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  background-color: #020617;
+  padding: 0.4rem;
+  border-radius: 12px;
+  border: 1px solid #334155;
+}
+
+.tabs button {
+  border: none;
+  padding: 0.75rem;
+  border-radius: 9px;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tabs button.active {
+  background-color: #2563eb;
+  color: white;
 }
 
 form {
@@ -103,7 +220,7 @@ input {
   border-radius: 10px;
 }
 
-button {
+.primary {
   padding: 0.9rem;
   border: none;
   border-radius: 10px;
@@ -113,12 +230,13 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+.primary:hover {
   background-color: #1d4ed8;
 }
 
-.error {
-  color: #f87171;
+.message {
+  margin-top: 1rem;
+  color: #facc15;
   text-align: center;
 }
 
