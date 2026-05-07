@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import Navbar from './components/Navbar.vue'
+import DashboardStats from './components/DashboardStats.vue'
 import TicketForm from './components/TicketForm.vue'
 import TicketList from './components/TicketList.vue'
 
@@ -36,6 +37,8 @@ function deleteTicket(id) {
   <Navbar />
 
   <main class="container">
+    <DashboardStats :tickets="tickets" />
+
     <TicketForm @add-ticket="addTicket" />
 
     <TicketList
