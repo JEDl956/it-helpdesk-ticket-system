@@ -8,14 +8,16 @@ defineProps({
   },
 })
 
-defineEmits(['update-status', 'delete-ticket'])
+defineEmits(['update-status', 'delete-ticket', 'edit-ticket'])
 </script>
 
 <template>
   <section>
     <h3>Support Tickets</h3>
 
-    <p v-if="tickets.length === 0">No tickets submitted yet.</p>
+    <p v-if="tickets.length === 0">
+      No tickets submitted yet.
+    </p>
 
     <TicketCard
       v-for="ticket in tickets"
@@ -23,6 +25,7 @@ defineEmits(['update-status', 'delete-ticket'])
       :ticket="ticket"
       @update-status="$emit('update-status', ticket.id)"
       @delete-ticket="$emit('delete-ticket', ticket.id)"
+      @edit-ticket="$emit('edit-ticket', $event)"
     />
   </section>
 </template>

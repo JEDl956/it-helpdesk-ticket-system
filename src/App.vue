@@ -1,11 +1,27 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import Navbar from './components/Navbar.vue'
 import DashboardStats from './components/DashboardStats.vue'
 import TicketForm from './components/TicketForm.vue'
 import TicketList from './components/TicketList.vue'
 
 const tickets = ref([])
+
+onMounted(() => {
+  const savedTickets = localStorage.getItem('tickets')
+
+  if (savedTickets) {
+    tickets.value = JSON.parse(savedTickets)
+  }
+})
+
+watch(
+  tickets,
+  (newTickets) => {
+    localStorage.setItem('tickets', JSON.stringify(newTickets))
+  },
+  { deep: true },
+)
 
 function addTicket(ticket) {
   tickets.value.push({

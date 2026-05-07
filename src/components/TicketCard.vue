@@ -1,12 +1,33 @@
 <script setup>
-defineProps({
+import { ref } from 'vue'
+
+const props = defineProps({
   ticket: {
     type: Object,
     required: true,
   },
 })
 
-defineEmits(['update-status', 'delete-ticket'])
+const emit = defineEmits([
+  'update-status',
+  'delete-ticket',
+  'edit-ticket',
+])
+
+const isEditing = ref(false)
+
+const editedTitle = ref(props.ticket.title)
+const editedDescription = ref(props.ticket.description)
+
+function saveEdit() {
+  emit('edit-ticket', {
+    id: props.ticket.id,
+    title: editedTitle.value,
+    description: editedDescription.value,
+  })
+
+  isEditing.value = false
+}
 
 function getStatusClass(status) {
   if (status === 'Open') return 'open'
@@ -18,16 +39,28 @@ function getStatusClass(status) {
 <template>
   <article class="ticket-card">
     <div class="header">
-      <h4>{{ ticket.title }}</h4>
+      <template v-if="isEditing">
+        <input v-model="editedTitle" />
+      </template>
+
+      <template v-else>
+        <h4>{{ ticket.title }}</h4>
+      </template>
 
       <span :class="getStatusClass(ticket.status)">
         {{ ticket.status }}
       </span>
     </div>
 
-    <p class="description">
-      {{ ticket.description }}
-    </p>
+    <template v-if="isEditing">
+      <textarea v-model="editedDescription"></textarea>
+    </template>
+
+    <template v-else>
+      <p class="description">
+        {{ ticket.description }}
+      </p>
+    </template>
 
     <div class="details">
       <p><strong>Priority:</strong> {{ ticket.priority }}</p>
@@ -37,6 +70,14 @@ function getStatusClass(status) {
     <div class="actions">
       <button @click="$emit('update-status')">
         Change Status
+      </button>
+
+      <button v-if="!isEditing" @click="isEditing = true">
+        Edit
+      </button>
+
+      <button v-else @click="saveEdit">
+        Save
       </button>
 
       <button class="delete" @click="$emit('delete-ticket')">
@@ -72,6 +113,13 @@ function getStatusClass(status) {
 .actions {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 0.6rem;
 }
 
 button {
