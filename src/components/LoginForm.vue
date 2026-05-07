@@ -18,35 +18,75 @@ function handleLogin() {
 </script>
 
 <template>
-  <section class="login-card">
-    <h2>IT Help Desk Login</h2>
+  <main class="login-page">
+    <section class="login-card">
+      <div class="icon">🎧</div>
 
-    <form @submit.prevent="handleLogin">
-      <input v-model="email" type="email" placeholder="Email" />
+      <h1>IT Help Desk</h1>
+      <p class="subtitle">Sign in to manage support tickets</p>
 
-      <input v-model="password" type="password" placeholder="Password" />
+      <form @submit.prevent="handleLogin">
+        <input v-model="email" type="email" placeholder="Email address" />
 
-      <button type="submit">Login</button>
+        <input v-model="password" type="password" placeholder="Password" />
 
-      <p v-if="error" class="error">{{ error }}</p>
-    </form>
+        <button type="submit">Sign In</button>
 
-    <p class="hint">Test Login: admin@test.com / password123</p>
-  </section>
+        <p v-if="error" class="error">{{ error }}</p>
+      </form>
+
+      <div class="test-box">
+        <p><strong>Test Account</strong></p>
+        <p>admin@test.com / password123</p>
+      </div>
+    </section>
+  </main>
 </template>
 
 <style scoped>
-.login-card {
-  max-width: 400px;
-  margin: 5rem auto;
-  background-color: white;
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.35), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.2), transparent 35%),
+    #0f172a;
 }
 
-h2 {
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  background-color: #111827;
+  border: 1px solid #1f2937;
+  padding: 2.5rem;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+}
+
+.icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 1rem;
+  display: grid;
+  place-items: center;
+  background-color: #2563eb;
+  border-radius: 16px;
+  font-size: 1.8rem;
+}
+
+h1 {
+  margin: 0;
+  color: #f9fafb;
   text-align: center;
+}
+
+.subtitle {
+  margin: 0.5rem 0 2rem;
+  text-align: center;
+  color: #9ca3af;
 }
 
 form {
@@ -56,25 +96,44 @@ form {
 }
 
 input {
-  padding: 0.75rem;
+  padding: 0.9rem;
+  background-color: #020617;
+  color: white;
+  border: 1px solid #334155;
+  border-radius: 10px;
 }
 
 button {
+  padding: 0.9rem;
+  border: none;
+  border-radius: 10px;
   background-color: #2563eb;
   color: white;
-  border: none;
-  padding: 0.75rem;
+  font-weight: bold;
   cursor: pointer;
 }
 
+button:hover {
+  background-color: #1d4ed8;
+}
+
 .error {
-  color: #dc2626;
+  color: #f87171;
   text-align: center;
 }
 
-.hint {
-  margin-top: 1rem;
-  font-size: 0.9rem;
+.test-box {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #020617;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  color: #cbd5e1;
   text-align: center;
+  font-size: 0.9rem;
+}
+
+.test-box p {
+  margin: 0.25rem 0;
 }
 </style>

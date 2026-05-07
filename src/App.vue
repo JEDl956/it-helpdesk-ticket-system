@@ -138,6 +138,8 @@ function editTicket(updatedTicket) {
 
 <style scoped>
 .container {
+  max-width: 1100px;
+  margin: 0 auto;
   padding: 2rem;
   font-family: Arial, sans-serif;
 }
@@ -154,6 +156,11 @@ function editTicket(updatedTicket) {
   border: none;
   padding: 0.75rem 1rem;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.logout:hover {
+  background-color: #b91c1c;
 }
 </style>
