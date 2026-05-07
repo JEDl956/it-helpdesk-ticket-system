@@ -34,6 +34,12 @@ function getStatusClass(status) {
   if (status === 'In Progress') return 'progress'
   return 'closed'
 }
+
+function getPriorityClass(priority) {
+  if (priority === 'High') return 'high'
+  if (priority === 'Medium') return 'medium'
+  return 'low'
+}
 </script>
 
 <template>
@@ -63,8 +69,18 @@ function getStatusClass(status) {
     </template>
 
     <div class="details">
-      <p><strong>Priority:</strong> {{ ticket.priority }}</p>
-      <p><strong>Created:</strong> {{ ticket.createdAt }}</p>
+      <p>
+        <strong>Priority:</strong>
+
+        <span :class="getPriorityClass(ticket.priority)">
+          {{ ticket.priority }}
+        </span>
+      </p>
+
+      <p>
+        <strong>Created:</strong>
+        {{ ticket.createdAt }}
+      </p>
     </div>
 
     <div class="actions">
@@ -154,5 +170,20 @@ button {
 
 .closed {
   background-color: #16a34a;
+}
+
+.high {
+  color: #dc2626;
+  font-weight: bold;
+}
+
+.medium {
+  color: #f59e0b;
+  font-weight: bold;
+}
+
+.low {
+  color: #16a34a;
+  font-weight: bold;
 }
 </style>
