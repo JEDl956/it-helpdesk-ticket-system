@@ -79,7 +79,7 @@ function createAccount() {
 <template>
   <main class="login-page">
     <section class="login-card">
-      <div class="icon">🎧</div>
+      <div class="icon">🖥️</div>
 
       <h1>IT Help Desk</h1>
       <p class="subtitle">Manage support tickets securely</p>
