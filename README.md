@@ -1,5 +1,30 @@
-# Vue 3 + Vite
+# IT Help Desk Ticket System
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This project is a Vue 3 IT Help Desk Ticket System. It allows users to sign in, create an account, submit support tickets, search tickets, filter by status, edit tickets, update ticket status, and delete tickets.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Features
+
+- Login and create account page
+- Ticket creation form
+- Ticket list with edit and delete options
+- Status updates for Open, In Progress, and Closed
+- Search tickets
+- Filter tickets by status
+- Dashboard statistics
+- Data saved with localStorage
+- Responsive dark theme design
+
+## Technologies Used
+
+- Vue 3
+- Vite
+- JavaScript
+- HTML
+- CSS
+- localStorage
+
+## Project Setup
+
+```bash
+npm install
+npm run dev
