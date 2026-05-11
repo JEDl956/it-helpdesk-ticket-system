@@ -10,25 +10,37 @@ const confirmPassword = ref('')
 const message = ref('')
 const users = ref([])
 
+const testUser = {
+  email: 'admin@test.com',
+  password: 'password123',
+}
+
 onMounted(() => {
   const savedUsers = localStorage.getItem('users')
 
   if (savedUsers) {
     users.value = JSON.parse(savedUsers)
-  } else {
-    users.value = [
-      {
-        email: 'admin@test.com',
-        password: 'password123',
-      },
-    ]
 
-    localStorage.setItem('users', JSON.stringify(users.value))
+    const hasTestUser = users.value.some((user) => user.email === testUser.email)
+
+    if (!hasTestUser) {
+      users.value.push(testUser)
+      saveUsers()
+    }
+  } else {
+    users.value = [testUser]
+    saveUsers()
   }
 })
 
 function saveUsers() {
   localStorage.setItem('users', JSON.stringify(users.value))
+}
+
+function fillTestAccount() {
+  email.value = testUser.email
+  password.value = testUser.password
+  message.value = ''
 }
 
 function handleLogin() {
@@ -104,7 +116,6 @@ function createAccount() {
 
       <form v-if="mode === 'login'" @submit.prevent="handleLogin">
         <input v-model="email" type="email" placeholder="Email address" />
-
         <input v-model="password" type="password" placeholder="Password" />
 
         <button class="primary" type="submit">Sign In</button>
@@ -112,21 +123,22 @@ function createAccount() {
 
       <form v-else @submit.prevent="createAccount">
         <input v-model="email" type="email" placeholder="Create email address" />
-
         <input v-model="password" type="password" placeholder="Create password" />
-
-        <input
-          v-model="confirmPassword"
-          type="password"
-          placeholder="Confirm password"
-        />
+        <input v-model="confirmPassword" type="password" placeholder="Confirm password" />
 
         <button class="primary" type="submit">Create Account</button>
       </form>
 
       <p v-if="message" class="message">{{ message }}</p>
 
-      
+      <div v-if="mode === 'login'" class="test-box">
+        <p><strong>Test Account</strong></p>
+        <p>Email: admin@test.com</p>
+        <p>Password: password123</p>
+        <button type="button" class="test-button" @click="fillTestAccount">
+          Use Test Account
+        </button>
+      </div>
     </section>
   </main>
 </template>
@@ -250,5 +262,19 @@ input {
 
 .test-box p {
   margin: 0.25rem 0;
+}
+
+.test-button {
+  margin-top: 0.75rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  background-color: #1e293b;
+  color: white;
+  cursor: pointer;
+}
+
+.test-button:hover {
+  background-color: #334155;
 }
 </style>
